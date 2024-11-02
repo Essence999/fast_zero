@@ -1,0 +1,70 @@
+[project]
+name = "fast-zero"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["fastapi[standard]>=0.115.4"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.7.2",
+    "taskipy>=1.14.0",
+]
+
+[tool.taskipy.tasks]
+run = "fastapi dev fast_zero/app.py --reload"
+
+lint = "ruff check . && ruff check . --diff"
+format = "ruff check . --fix && ruff format ."
+
+pre_test = "task lint"
+test = "pytest -s -x --cov=fast_zero -vv"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = [
+    "-p no:warnings",
+]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "PT",  # pytest
+    "PL",  # pylint
+    "C",   # mccabe
+    "B",   # bugbear
+    "D",   # pydocstyle
+    "UP",  # pyupgrade
+    "S",   # bandit
+    "RUF", # ruff-specific rules
+]
+
+# Ignora S101 apenas nos arquivos de teste
+per-file-ignores = { "tests/*.py" = ["S101"] }
+
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+]
+
+isort.known-first-party = ["fast_zero"]
+mccabe.max-complexity = 10
+pydocstyle.convention = "google"
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "auto"
