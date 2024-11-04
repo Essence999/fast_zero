@@ -13,3 +13,5 @@ wheels/
 .coverage
 htmlcov/
 .ruff_cache/
+
+.db

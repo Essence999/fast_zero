@@ -4,7 +4,12 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["fastapi[standard]>=0.115.4"]
+dependencies = [
+    "alembic>=1.13.3",
+    "fastapi[standard]>=0.115.4",
+    "pydantic-settings>=2.6.1",
+    "sqlalchemy>=2.0.36",
+]
 
 [dependency-groups]
 dev = [
@@ -15,13 +20,14 @@ dev = [
 ]
 
 [tool.taskipy.tasks]
-run = "fastapi dev fast_zero/app.py --reload"
+run = "fastapi dev fast_zero/app.py"
 
 lint = "ruff check . && ruff check . --diff"
 format = "ruff check . --fix && ruff format ."
 
 pre_test = "task lint"
-test = "pytest -s -x --cov=fast_zero -vv"
+test = 'pytest -s -x --cov=fast_zero -vv'
+post_test = 'coverage html'
 
 [tool.pytest.ini_options]
 pythonpath = "."
@@ -57,6 +63,9 @@ per-file-ignores = { "tests/*.py" = ["S101"] }
 
 ignore = [
     "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
     "D104", # Missing docstring in public package
 ]
 
